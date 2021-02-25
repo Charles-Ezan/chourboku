@@ -70,15 +70,6 @@ namespace sudoku
                 graphic.DrawLine(pen, x, 0, x, line_number*size-size);
                 x += size;
             }
-            for(int column=0; column < grid.Columns.Count; column++)
-            {
-                for (int row = 0; row < grid.Rows.Count; row++)
-                {
-                    Cell new_case = new Cell(grid[column, row]);
-                    cases[column, row] = new_case;
-                }
-            }
-        }
 
             // lignes horizontales
             for (int i = 0; i < line_number; i++)
