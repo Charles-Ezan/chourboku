@@ -10,19 +10,28 @@ namespace sudoku
     public class Cell
     {
         public int number_in_cell;
-        public DataGridViewCell cell;
+        public int cell_x;
+        public int cell_y;
+        /*        public DataGridViewCell cell;*/
 
-        public Cell(DataGridViewCell new_cell)
+        /*        public Cell(DataGridViewCell new_cell)
+                {
+                    cell = new_cell;
+                }*/
+        public Cell(int new_x, int new_y)
         {
-            cell = new_cell;
+            cell_x = new_x;
+            cell_y = new_y;
         }
+
+
 
         public int get_number_in_cell()
         {
             return number_in_cell;
         }
 
-        public void cell_display()
+/*        public void cell_display()
         {
             if (number_in_cell == 0)
             {
@@ -33,6 +42,6 @@ namespace sudoku
             {
                 cell.Value = "{$number}";
             }
-        }
+        }*/
     }
 }

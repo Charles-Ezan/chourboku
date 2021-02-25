@@ -12,7 +12,7 @@ namespace sudoku
 {
     public partial class Form1 : Form
     {
-        Cell[,] cases = new Cell[10, 10];
+        Cell[,] Cells = new Cell[8, 8];
         public Form1()
         {
             InitializeComponent();
@@ -53,7 +53,9 @@ namespace sudoku
         private void button1_Click(object sender, EventArgs e)
         {
             Graphics graphic = grid.CreateGraphics();
+            Pen effective_pen = new Pen(Brushes.Black, 1);
             Pen pen = new Pen(Brushes.Black, 1);
+            Pen grass_pen = new Pen(Brushes.Black, 3);
             Font font = new Font("Arial",10);
 
 
@@ -67,23 +69,27 @@ namespace sudoku
             // lignes verticales
             for (int i = 0; i < line_number; i++)
             {
-                graphic.DrawLine(pen, x, 0, x, line_number*size-size);
+                if (i % 3 == 0)
+                    effective_pen = grass_pen;
+
+                else
+                    effective_pen = pen;
+                graphic.DrawLine(effective_pen, x, 0, x, line_number*size-size);
                 x += size;
             }
-            for(int column=0; column < grid.Columns.Count; column++)
-            {
-                for (int row = 0; row < grid.Rows.Count; row++)
-                {
-                    Cell new_case = new Cell(grid[column, row]);
-                    cases[column, row] = new_case;
-                }
-            }
-        }
 
             // lignes horizontales
             for (int i = 0; i < line_number; i++)
             {
-                graphic.DrawLine(pen, 0, y, line_number*size-size, y);
+
+                if (i % 3 == 0)
+                    effective_pen = grass_pen;
+
+                else
+                    effective_pen = pen;
+
+
+                graphic.DrawLine(effective_pen, 0, y, line_number*size-size, y);
                 y += size;
             }
         }

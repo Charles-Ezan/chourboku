@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace sudoku
 {
@@ -10,12 +11,22 @@ namespace sudoku
     {
         public bool BacktrackingSearch()
         {
-            return RecursiveBacktracking()
+            return RecursiveBacktracking();
         }
 
         private bool RecursiveBacktracking()
         {
-            throw new NotImplementedException();
+            return true;
+        }
+
+        private List<int> OrderDomainValues()
+        {
+
+        }
+
+        private Cell SelectUnassignedVariable()
+        {
+
         }
     }
 }
