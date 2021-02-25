@@ -12,7 +12,7 @@ namespace sudoku
 {
     public partial class Form1 : Form
     {
-        Case[,] cases = new Case[10, 10];
+        Cell[,] cases = new Cell[10, 10];
         public Form1()
         {
             InitializeComponent();
@@ -40,7 +40,7 @@ namespace sudoku
             {
                 for (int row = 0; row < grid.Rows.Count; row++)
                 {
-                    Case new_case = new Case(grid[column, row]);
+                    Cell new_case = new Cell(grid[column, row]);
                     cases[column, row] = new_case;
                 }
             }
