@@ -31,21 +31,46 @@ namespace sudoku
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.grid = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // grid
+            // 
+            this.grid.Location = new System.Drawing.Point(29, 21);
+            this.grid.Name = "grid";
+            this.grid.Size = new System.Drawing.Size(515, 317);
+            this.grid.TabIndex = 0;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(117, 361);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.grid);
+            this.Name = "Form1";
             this.Text = "Form1";
-            this.grid = new System.Windows.Forms.DataGridView();
-            //
-            // form1
-            //
-            this.Load += new System.EventHandler(this.Start_Game);
-
+            this.ResumeLayout(false);
 
         }
 
+        private Panel grid;
+        private Button button1;
+
         #endregion
-        private System.Windows.Forms.DataGridView grid;
+        /*        private System.Windows.Forms.DataGridView grid;
+                private DataGridView dataGridView1;*/
     }
 }
 
