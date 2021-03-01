@@ -10,7 +10,7 @@ namespace sudoku
     {
         public bool BacktrackingSearch()
         {
-            return RecursiveBacktracking()
+            return RecursiveBacktracking();
         }
 
         private bool RecursiveBacktracking()
