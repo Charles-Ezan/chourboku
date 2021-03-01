@@ -16,6 +16,26 @@ namespace sudoku
 
         private bool RecursiveBacktracking()
         {
+            //foreach (var cell in CSP.variables)
+            //{
+            //  if (cell.value == 0)
+            //  {
+            //      continue;
+            //  }
+            //  return assignment;
+            //}
+            //var candidate = SelectUnassignedVariable(CSP.variables, assignment, CSP)
+            //possibilities = OrderDomainValues(var, assignment, csp)
+            //foreach (int value in possibilities)
+            //{
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
             return true;
         }
 
@@ -26,6 +46,7 @@ namespace sudoku
 
         private Cell SelectUnassignedVariable()
         {
+            //SelectUnassignedVariable(CSP.variables, assignment, CSP)
 
         }
     }
