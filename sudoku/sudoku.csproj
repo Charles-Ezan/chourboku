@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Cell.cs" />
     <Compile Include="Agent.cs" />
+    <Compile Include="CSP.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
