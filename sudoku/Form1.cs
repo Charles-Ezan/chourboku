@@ -8,11 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+// Ajout
+using System.IO;
+using Newtonsoft.Json;
+
 namespace sudoku
 {
     public partial class Form1 : Form
     {
-        Cell[,] Cells = new Cell[8, 8];
+/*        Cell[,] Cells = new Cell[8, 8];*/
         public Form1()
         {
             InitializeComponent();
@@ -92,6 +96,33 @@ namespace sudoku
                 graphic.DrawLine(effective_pen, 0, y, line_number*size-size, y);
                 y += size;
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string json_path = $"C:\\Users\\riwan\\source\\repos\\chourboku\\sudoku\\sudokus.json";
+            /*var reader = new StreamReader(json_path);*/
+            /*         StreamReader file = new StreamReader(json_path);*/
+            /*string jsonString = */
+
+            /*            using (StreamReader file = File.OpenText(@"C:\Users\riwan\source\repos\chourboku\sudoku"))
+                        {
+                            string jsonFromFile = StreamReader.ReadToEnd();
+                        }
+                        using (JsonTextReader reader = new JsonTextReader(file))
+                        {
+                            JObject o2 = (JObject)JToken.ReadFrom(reader);
+                        }*/
+            string jsonFromFile;
+            using (var reader = new StreamReader(json_path))
+            {
+                jsonFromFile = reader.ReadToEnd(); 
+            }
+            /*Console.WriteLine(jsonFromFile);*/
+            var j_object = (JObject)JsonConvert.DeserializeObject(jsonFromFile);
+            var a_sudoku = j_object.Item
+/*            string data_type = a_data.GetType();*/
+
         }
     }
 }

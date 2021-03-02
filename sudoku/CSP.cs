@@ -10,6 +10,7 @@ namespace sudoku
     {
         //Variables
         //Ensemble des cases de la grille 9x9 (81 variables)
+        Cell[,] grid = new Cell[8, 8];
 
         // Domaine
         //public List<int> domaine = new List<int>( {1, 2, 3, 3, 4, 5, 6, 7, 8, 9});
@@ -18,5 +19,6 @@ namespace sudoku
         //On ne peut pas avoir deux fois la même valeur dans la même ligne
         //On ne peut pas avoir deux fois la même valeur dans la même colonne
         //On ne peut pas avoir deux fois la même valeur dans la même sous-grille
+
     }
 }

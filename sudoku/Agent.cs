@@ -39,15 +39,15 @@ namespace sudoku
             return true;
         }
 
-        private List<int> OrderDomainValues()
+/*        private List<int> OrderDomainValues()
         {
 
-        }
+        }*/
 
-        private Cell SelectUnassignedVariable()
+/*        private Cell SelectUnassignedVariable()
         {
             //SelectUnassignedVariable(CSP.variables, assignment, CSP)
 
-        }
+        }*/
     }
 }
