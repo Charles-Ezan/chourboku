@@ -18,5 +18,6 @@ namespace sudoku
         //On ne peut pas avoir deux fois la même valeur dans la même ligne
         //On ne peut pas avoir deux fois la même valeur dans la même colonne
         //On ne peut pas avoir deux fois la même valeur dans la même sous-grille
+        //public bool Constraints(Cell candidate, int possibilitie, )
     }
 }

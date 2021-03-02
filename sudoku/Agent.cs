@@ -25,29 +25,35 @@ namespace sudoku
             //  return assignment;
             //}
             //var candidate = SelectUnassignedVariable(CSP.variables, assignment, CSP)
-            //possibilities = OrderDomainValues(var, assignment, csp)
-            //foreach (int value in possibilities)
-            //{
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            return true;
+            List<int> possibilities = OrderDomainValues();
+            foreach (int value in possibilities)
+            {
+                //bool respectConstraints = CSP.Constraints(var, value, assignment);
+                bool respectConstraints = true;
+                if (respectConstraints)
+                {
+                    //add var = value to assignement
+                    bool result = RecursiveBacktracking();
+                    if (result)
+                    {
+                        return true;
+                    }
+                    //remove var = value to assignment
+                }
+            }
+            return false;
         }
 
         private List<int> OrderDomainValues()
         {
-
+            //Pour l'instant, OrderDomainValues fournit une liste d'entier
+            //A voir pour qu'il fournisse CSP.domaine
+            return new List<int>() { 1, 2, 3, 3, 4, 5, 6, 7, 8, 9 };
         }
 
         private Cell SelectUnassignedVariable()
         {
             //SelectUnassignedVariable(CSP.variables, assignment, CSP)
 
-        }
     }
 }
