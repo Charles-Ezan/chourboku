@@ -9,7 +9,7 @@ namespace sudoku
 {
     public class Cell
     {
-        public int number_in_cell;
+        public int value_in_cell;
         public int cell_x;
         public int cell_y;
         /*        public DataGridViewCell cell;*/
@@ -28,7 +28,12 @@ namespace sudoku
 
         public int get_number_in_cell()
         {
-            return number_in_cell;
+            return value_in_cell;
+        }
+
+        public void set_number_in_cell(int new_value)
+        {
+            value_in_cell = new_value;
         }
 
 /*        public void cell_display()

@@ -34,6 +34,7 @@ namespace sudoku
             this.grid = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.launcher_resolution = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // grid
@@ -63,11 +64,22 @@ namespace sudoku
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // launcher_resolution
+            // 
+            this.launcher_resolution.Location = new System.Drawing.Point(332, 361);
+            this.launcher_resolution.Name = "launcher_resolution";
+            this.launcher_resolution.Size = new System.Drawing.Size(150, 23);
+            this.launcher_resolution.TabIndex = 3;
+            this.launcher_resolution.Text = "Launch Resolution";
+            this.launcher_resolution.UseVisualStyleBackColor = true;
+            this.launcher_resolution.Click += new System.EventHandler(this.launcher_resolution_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.launcher_resolution);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.grid);
@@ -80,6 +92,7 @@ namespace sudoku
         private Panel grid;
         private Button button1;
         private Button button2;
+        private Button launcher_resolution;
 
         #endregion
         /*        private System.Windows.Forms.DataGridView grid;

@@ -11,56 +11,70 @@ using System.Windows.Forms;
 // Ajout
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace sudoku
 {
     public partial class Form1 : Form
     {
-/*        Cell[,] Cells = new Cell[8, 8];*/
+        /*        Cell[,] Cells = new Cell[8, 8];*/
+
+        private Agent agent_sudoku = new Agent();
         public Form1()
         {
             InitializeComponent();
         }
 
-        //Creation de la grille
-        /*        private void Start_Game(object sender, EventArgs e)
-                {
-                    for(int i=0; i<10; i++)
-                    {
-                        grid.Rows.Add();
-                    }
 
-                    foreach (DataGridViewColumn column in grid.Columns)
-                    {
-                        column.Width = 80;
-                    }
-
-                    foreach (DataGridViewRow row in grid.Rows)
-                    {
-                        row.Height = 80;
-                    }
-
-                    for(int column=0; column < grid.Columns.Count; column++)
-                    {
-                        for (int row = 0; row < grid.Rows.Count; row++)
-                        {
-                            Case new_case = new Case(grid[column, row]);
-                            cases[column, row] = new_case;
-                        }
-                    }
-                }*/
-        private void Start_Game(object sender, EventArgs e)
+        public void Launch_first_sudoku()
         {
+            // First Sudoku
+            int[,] first_sudoku = new int[,] { {0,9,0,8,6,5,2,0,0},
+                                          {0,0,5,0,1,2,0,6,8},
+                                          {0,0,0,0,0,0,0,4,0},
+                                          {0,0,0,0,0,8,0,5,6},
+                                          {0,0,8,0,0,0,4,0,0},
+                                          {4,5,0,9,0,0,0,0,0},
+                                          {0,8,0,0,0,0,0,0,0},
+                                          {2,4,0,1,7,0,5,0,0},
+                                          {0,0,7,2,8,3,0,9,0}};
 
+            int[,] second_sudoku = new int[,]
+            {
+
+                { 0, 0, 8, 0, 0, 0, 5, 0, 0},
+
+                { 6, 0, 0, 7, 0, 5, 0, 0, 3 },
+
+                { 0, 9, 0, 8, 3, 2, 0, 0, 0 },
+
+                { 0, 0, 4, 0, 1, 0, 0, 0, 0 },
+
+                { 3, 8, 0, 4, 0, 7, 0, 5, 1 },
+
+                { 0, 0, 0, 0, 8, 0, 2, 0, 0 },
+
+                { 0, 0, 0, 1, 5, 9, 0, 7, 0 },
+
+                { 8, 0, 0, 3, 0, 4, 0, 0, 5 },
+
+                { 0, 0, 9, 0, 0, 0, 1, 0, 0 }
+            };
+
+            agent_sudoku.Initialize_assignement(second_sudoku);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        public void Create_grid()
         {
+            // Clear the grid
+            grid.Refresh();
+
+            // Création de la grille visuelle
             Graphics graphic = grid.CreateGraphics();
             Pen effective_pen = new Pen(Brushes.Black, 1);
             Pen pen = new Pen(Brushes.Black, 1);
             Pen grass_pen = new Pen(Brushes.Black, 3);
-            Font font = new Font("Arial",10);
+            Font font = new Font("Arial", 10);
 
 
             int line_number = 10;
@@ -78,7 +92,7 @@ namespace sudoku
 
                 else
                     effective_pen = pen;
-                graphic.DrawLine(effective_pen, x, 0, x, line_number*size-size);
+                graphic.DrawLine(effective_pen, x, 0, x, line_number * size - size);
                 x += size;
             }
 
@@ -93,11 +107,35 @@ namespace sudoku
                     effective_pen = pen;
 
 
-                graphic.DrawLine(effective_pen, 0, y, line_number*size-size, y);
+                graphic.DrawLine(effective_pen, 0, y, line_number * size - size, y);
+                y += size;
+            }
+
+            x = 0f;
+            y = 0f;
+
+            // Charger un sudoku dans le tableau
+            for (int k = 0; k < line_number - 1; k++)
+            {
+                for (int n = 0; n < line_number - 1; n++)
+                {
+                    graphic.DrawString(agent_sudoku.Get_asssignement().sudoku[k, n].ToString(), font, Brushes.Black, x, y);
+                    x += size;
+                }
+                x = 0f;
                 y += size;
             }
         }
 
+        // Lancer le sudoku
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Launch_first_sudoku();
+            Create_grid();
+            Console.WriteLine("Grille créée !");
+        }
+
+        // Lire un sudoku dans un fichier json
         private void button2_Click(object sender, EventArgs e)
         {
             string json_path = $"C:\\Users\\riwan\\source\\repos\\chourboku\\sudoku\\sudokus.json";
@@ -120,9 +158,45 @@ namespace sudoku
             }
             /*Console.WriteLine(jsonFromFile);*/
             var j_object = (JObject)JsonConvert.DeserializeObject(jsonFromFile);
-            var a_sudoku = j_object.Item
-/*            string data_type = a_data.GetType();*/
+            Console.WriteLine(j_object);
 
+            var a_sudoku = j_object["RawSudoku"].First;
+            List<string> string_sudoku = new List<string>();
+
+/*            Console.WriteLine(a_sudoku.GetType());
+            Console.WriteLine(a_sudoku);*/
+
+        }
+
+        private void launcher_resolution_Click(object sender, EventArgs e)
+        {
+            bool solved_sudoku = agent_sudoku.BacktrackingSearch();
+
+            Console.WriteLine("Sudoku résolu ? " + solved_sudoku);
+            Create_grid();
+/*            Console.WriteLine("Solution !");*/
+
+            /*            CSP csp = new CSP();
+
+
+                        int[,] first_sudoku = new int[,] {                    {0,9,0,8,6,5,2,0,0},
+                                                                              {0,0,5,0,1,2,0,6,8},
+                                                                              {0,0,0,0,0,0,0,4,0},
+                                                                              {0,0,0,0,0,8,0,5,6},
+                                                                              {0,0,8,0,0,0,4,0,0},
+                                                                              {4,5,0,9,0,0,0,0,0},
+                                                                              {0,8,0,0,0,0,0,0,0},
+                                                                              {2,4,0,1,7,0,5,0,0},
+                                                                              {0,0,7,2,8,3,0,9,0}};
+                        Console.WriteLine("first_sudoku[0,0] "+ first_sudoku[0,0]);*/
+
+            /*            Console.WriteLine("first_sudoku[5,0] "+ first_sudoku[5, 0])*/
+            ;
+            /*csp.Test_column_constraints(1, 1, first_sudoku);*/
+            /*csp.Test_mini_grid_constraints(1,0, 0, first_sudoku);*/
+            /*csp.Test_mini_grid_constraints(0,0,0, first_sudoku);*/
+            /*csp.Test_column_constraints(0,8, first_sudoku);*/
+            /*csp.Test_row_constraints(0, 2, first_sudoku);*/
         }
     }
 }
