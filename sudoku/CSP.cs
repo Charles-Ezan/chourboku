@@ -16,19 +16,6 @@ namespace sudoku
         public List<int> domaine = new List<int>(){1, 2, 3, 4, 5, 6, 7, 8, 9};
 
         //Contraintes
-        //On ne peut pas avoir deux fois la même valeur dans la même ligne
-
-/*        public List<int> row_constraint = new List<int>();*/
-
-        //On ne peut pas avoir deux fois la même valeur dans la même colonne
-
-/*        public List<int> column_constraint = new List<int>();*/
-
-        //On ne peut pas avoir deux fois la même valeur dans la même sous-grille
-/*
-        public List<int> mini_grid_constraint = new List<int>();*/
-
-        //public bool Constraints(Cell candidate, int possibilitie, )
 
 
         // Test de la contrainte de ligne
@@ -41,12 +28,6 @@ namespace sudoku
                 if (sudoku[value_x, i] != 0)
                     row_sudoku.Add(sudoku[value_x,i]);
             }
-
-/*            foreach (int value in row_sudoku)
-            {
-                Console.WriteLine(value);
-            }*/
-
             // Test de la valeur par rapport aux autres numéros dans la ligne
             foreach (int row_value in row_sudoku)
             {

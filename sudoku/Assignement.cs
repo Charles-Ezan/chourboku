@@ -44,7 +44,6 @@ namespace sudoku
         public void Reset_variable_in_sudoku(int a_row, int a_column)
         {
             sudoku[a_row, a_column] = 0;
-            //Console.WriteLine("Variable Reset !");
         }
 
 
@@ -65,7 +64,6 @@ namespace sudoku
                     complete = false;
                 }
             }
-/*            Console.WriteLine("Empty Variable : " + empty_var);*/
         }
     }
 }
