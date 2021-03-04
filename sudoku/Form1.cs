@@ -61,7 +61,7 @@ namespace sudoku
                 { 0, 0, 9, 0, 0, 0, 1, 0, 0 }
             };
 
-            agent_sudoku.Initialize_assignement(second_sudoku);
+            agent_sudoku.Initialize_assignement(first_sudoku);
         }
 
         public void Create_grid()
@@ -174,29 +174,6 @@ namespace sudoku
 
             Console.WriteLine("Sudoku résolu ? " + solved_sudoku);
             Create_grid();
-/*            Console.WriteLine("Solution !");*/
-
-            /*            CSP csp = new CSP();
-
-
-                        int[,] first_sudoku = new int[,] {                    {0,9,0,8,6,5,2,0,0},
-                                                                              {0,0,5,0,1,2,0,6,8},
-                                                                              {0,0,0,0,0,0,0,4,0},
-                                                                              {0,0,0,0,0,8,0,5,6},
-                                                                              {0,0,8,0,0,0,4,0,0},
-                                                                              {4,5,0,9,0,0,0,0,0},
-                                                                              {0,8,0,0,0,0,0,0,0},
-                                                                              {2,4,0,1,7,0,5,0,0},
-                                                                              {0,0,7,2,8,3,0,9,0}};
-                        Console.WriteLine("first_sudoku[0,0] "+ first_sudoku[0,0]);*/
-
-            /*            Console.WriteLine("first_sudoku[5,0] "+ first_sudoku[5, 0])*/
-            ;
-            /*csp.Test_column_constraints(1, 1, first_sudoku);*/
-            /*csp.Test_mini_grid_constraints(1,0, 0, first_sudoku);*/
-            /*csp.Test_mini_grid_constraints(0,0,0, first_sudoku);*/
-            /*csp.Test_column_constraints(0,8, first_sudoku);*/
-            /*csp.Test_row_constraints(0, 2, first_sudoku);*/
         }
     }
 }

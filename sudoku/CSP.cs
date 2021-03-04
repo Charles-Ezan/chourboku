@@ -113,11 +113,10 @@ namespace sudoku
                     break;
                 }
             }
-
-            List<int> mini_grid_sudoku = new List<int>();
-            for (int i = 1 * interval_mini_grid_x; i < interval_mini_grid_x + 3; i++)
+/*            Console.WriteLine("interval_mini_grid_x  interval_mini_grid_y : " + interval_mini_grid_x.ToString() + " " + interval_mini_grid_y.ToString());*/            List<int> mini_grid_sudoku = new List<int>();
+            for (int i = 3 * interval_mini_grid_x-2; i < interval_mini_grid_x*3; i++)
             {
-                for (int j = 1 * interval_mini_grid_y; j < interval_mini_grid_y + 3; j++)
+                for (int j = 3 * interval_mini_grid_y-2; j < interval_mini_grid_y*3; j++)
                 {
                     if ((sudoku[i - 1, j - 1]) != 0) { 
                         mini_grid_sudoku.Add(sudoku[i - 1, j - 1]);

@@ -33,35 +33,6 @@ namespace sudoku
                 return RecursiveBacktracking();
             }
 
-        /*       private bool RecursiveBacktracking()
-               {
-                   //foreach (var cell in CSP.variables)
-                   //{
-                   //  if (cell.value == 0)
-                   //  {
-                   //      continue;
-                   //  }
-                   //  return assignment;
-                   //}
-                   //var candidate = SelectUnassignedVariable(CSP.variables, assignment, CSP)
-       *//*            List<int> possibilities = OrderDomainValues();*//*
-                   foreach (int value in order_domain_values)
-                   {
-                       //bool respectConstraints = CSP.Constraints(var, value, assignment);
-                       bool respectConstraints = true;
-                       if (respectConstraints)
-                       {
-                           //add var = value to assignement
-                           bool result = RecursiveBacktracking();
-                           if (result)
-                           {
-                               return true;
-                           }
-                           //remove var = value to assignment
-                       }
-                   }
-                   return false;
-               }*/
         // Retourne la position de l'entier nul
         private Tuple<int,int> Select_unassigned_variable(Assignement assignement)
         {
@@ -104,11 +75,9 @@ namespace sudoku
                 // Test de la consistance avec les contraintes
                 if (csp.Is_assignement_consistent(value,var_position.Item1, var_position.Item2, assignement.sudoku))
                 {
-/*                    Console.WriteLine("Contrainte respectée !");*/
                     assignement.Set_variable_in_sudoku(value, var_position.Item1, var_position.Item2);
                     bool result = RecursiveBacktracking();
                     if (result) { return true; }
-                    /*assignement.sudoku[var_position.Item1, var_position.Item2] = 0;*/
                     assignement.Reset_variable_in_sudoku(var_position.Item1, var_position.Item2);
                 }
 

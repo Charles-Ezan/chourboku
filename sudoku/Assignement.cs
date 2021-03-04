@@ -65,7 +65,7 @@ namespace sudoku
                     complete = false;
                 }
             }
-            Console.WriteLine("Empty Variable : " + empty_var);
+/*            Console.WriteLine("Empty Variable : " + empty_var);*/
         }
     }
 }
