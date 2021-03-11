@@ -14,7 +14,7 @@ namespace sudoku
 
         private CSP csp = new CSP();
 
-/*        List<int> order_domain_values = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };*/
+        /*        List<int> order_domain_values = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };*/
 
 
         public void Initialize_assignement(int[,] sudoku)
@@ -49,7 +49,58 @@ namespace sudoku
                 }
             }
             return Tuple.Create(value_x, value_y);
+        }
 
+        public Tuple<int, int> MRV(Assignement assignement)
+        {
+            int x_pos = 0;
+            int y_pos = 0;
+
+            int min = assignement.sudoku.GetLength(0);
+
+            Tuple<int, int> pos = new Tuple<int, int>(x_pos, y_pos);
+
+            //Parcours les variables non assignées
+            for (int i = 0; i < assignement.sudoku.GetLength(0); i++)
+            {
+                for (int j = 0; j < assignement.sudoku.GetLength(1); j++)
+                {
+                    if (assignement.sudoku[i, j] == 0)
+                    {
+                        List <int> domaine = Find_Domain(i, j, assignement);
+                        if (domaine.Count < min)
+                        {
+                            Console.WriteLine("min avant=" + min);
+                            min = domaine.Count;
+                            Console.WriteLine("min apres=" + min);
+                            //Console.WriteLine("min= " + min + " domaine.count = " + domaine.Count);
+                            x_pos = i;
+                            y_pos = j;
+                        }
+                    }
+                }
+            }
+            return Tuple.Create(x_pos, y_pos);
+        }
+
+        public List<int> Find_Domain(int value_x, int value_y, Assignement assignement)
+        {
+            List<int> domaine = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+            List<int> column_sudoku = new List<int>();
+            for (int i = 0; i < assignement.sudoku.GetLength(1); i++)
+            {
+                if (assignement.sudoku[i, value_y] != 0)
+                {
+                    domaine.Remove(value_y);
+                }
+
+                if (assignement.sudoku[value_x, i] != 0)
+                {
+                    domaine.Remove(value_x);
+                }
+            }
+            return domaine;
         }
 
         private bool RecursiveBacktracking()
@@ -58,11 +109,11 @@ namespace sudoku
             if (assignement.Get_complete()) { return true;  }
 
             // Sélection d'une variable vide
-            Tuple<int,int> var_position = Select_unassigned_variable(assignement);
-/*            Console.WriteLine("var_position = " + var_position);*/
+            Tuple<int,int> var_position = MRV(assignement);
+            //Console.WriteLine("var_position = " + var_position);
             foreach (int value in csp.domaine)
             {
-/*                Console.WriteLine("var_position = " + var_position);
+/*              Console.WriteLine("var_position = " + var_position);
                 Console.WriteLine("sudoku");
                 for (int i = 0; i < assignement.sudoku.GetLength(0); i++)
                 {
@@ -87,6 +138,7 @@ namespace sudoku
 
             return false;
         }
+
 
         
 

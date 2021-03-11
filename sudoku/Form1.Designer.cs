@@ -35,6 +35,7 @@ namespace sudoku
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.launcher_resolution = new System.Windows.Forms.Button();
+            this.MRV = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // grid
@@ -43,6 +44,7 @@ namespace sudoku
             this.grid.Name = "grid";
             this.grid.Size = new System.Drawing.Size(515, 317);
             this.grid.TabIndex = 0;
+            this.grid.Paint += new System.Windows.Forms.PaintEventHandler(this.grid_Paint);
             // 
             // button1
             // 
@@ -74,11 +76,25 @@ namespace sudoku
             this.launcher_resolution.UseVisualStyleBackColor = true;
             this.launcher_resolution.Click += new System.EventHandler(this.launcher_resolution_Click);
             // 
+            // MRV
+            // 
+            this.MRV.AutoSize = true;
+            this.MRV.Checked = true;
+            this.MRV.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.MRV.Location = new System.Drawing.Point(541, 361);
+            this.MRV.Name = "MRV";
+            this.MRV.Size = new System.Drawing.Size(50, 17);
+            this.MRV.TabIndex = 4;
+            this.MRV.Text = "MRV";
+            this.MRV.UseVisualStyleBackColor = true;
+            this.MRV.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.MRV);
             this.Controls.Add(this.launcher_resolution);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -86,6 +102,7 @@ namespace sudoku
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -93,6 +110,7 @@ namespace sudoku
         private Button button1;
         private Button button2;
         private Button launcher_resolution;
+        private CheckBox MRV;
 
         #endregion
         /*        private System.Windows.Forms.DataGridView grid;

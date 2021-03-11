@@ -170,10 +170,25 @@ namespace sudoku
 
         private void launcher_resolution_Click(object sender, EventArgs e)
         {
+            var watch = System.Diagnostics.Stopwatch.StartNew(); //timer
+
             bool solved_sudoku = agent_sudoku.BacktrackingSearch();
 
-            Console.WriteLine("Sudoku résolu ? " + solved_sudoku);
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+
+            Console.WriteLine("Sudoku résolu ? " + solved_sudoku + " in " + elapsedMs + " ms");
             Create_grid();
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void grid_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

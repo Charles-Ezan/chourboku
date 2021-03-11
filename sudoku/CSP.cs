@@ -40,7 +40,7 @@ namespace sudoku
         }
 
 
-        // Test de la contrainte de ligne
+        // Test de la contrainte de colonne
         public bool Test_column_constraints(int value_tested, int value_y, int[,] sudoku)//, int value_y)
         {
 
@@ -120,6 +120,8 @@ namespace sudoku
 
             return true;
         }
+
+
 
         public bool Is_assignement_consistent(int value_tested, int value_x, int value_y, int[,] sudoku)
         {
