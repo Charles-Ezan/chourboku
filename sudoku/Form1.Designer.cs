@@ -110,7 +110,7 @@ namespace sudoku
         private Button button1;
         private Button button2;
         private Button launcher_resolution;
-        private CheckBox MRV;
+        public CheckBox MRV;
 
         #endregion
         /*        private System.Windows.Forms.DataGridView grid;
