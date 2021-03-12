@@ -22,6 +22,7 @@ namespace sudoku
         {
             assignement.Initialize_sudoku(sudoku);
             csp = new CSP(sudoku);
+            performance_measure = 0;
         }
 
 
@@ -52,14 +53,16 @@ namespace sudoku
             return Tuple.Create(100,100);
         }
         // MRV - Choix de la variable avec le plus petit nombre de valeurs légales
-        public Tuple<int, int> MRV(List<Variable> variables)
+        public Tuple<int, int> MRV(CSP csp)
         {
             int x_pos = 0;
             int y_pos = 0;
 
             int min = assignement.sudoku.GetLength(0);
 
-            foreach (Variable a_variable in variables)
+            Variable variable_kept = new Variable();
+
+            foreach (Variable a_variable in csp.variables)
             {
                 if(a_variable.value == 0)
                 {
@@ -69,11 +72,58 @@ namespace sudoku
                         x_pos = a_variable.position.Item1;
                         y_pos = a_variable.position.Item2;
                     }
+                    // Bris d'égalité entre variable
+                    else if (a_variable.domain.Count == min)
+                    {
+                        variable_kept = csp.Get_variable_from_position(Tuple.Create(x_pos, y_pos));
+                        var position_after_DH = Degree_heuristic(a_variable, variable_kept, csp);
+                        x_pos = position_after_DH.Item1;
+                        y_pos = position_after_DH.Item2;
+                    }
                 }
             }
             return Tuple.Create(x_pos, y_pos);
-
         }
+
+        // Degree Heuristic - On choisi la variable avec le plus de voisin avec variable non assigné
+        public Tuple<int,int> Degree_heuristic(Variable var_a, Variable var_b, CSP csp)
+        {
+            int number_empty_neighbor_var_a = 0;
+            int number_empty_neighbor_var_b = 0;
+            int x = 0;
+            int y = 0;
+
+            foreach (Tuple<int,int> neighbour_position  in var_a.neighbours)
+            {
+                if(csp.Get_variable_from_position(neighbour_position).value == 0)
+                {
+                    number_empty_neighbor_var_a++;
+                }
+            }
+
+            foreach (Tuple<int, int> neighbour_position in var_b.neighbours)
+            {
+                if (csp.Get_variable_from_position(neighbour_position).value == 0)
+                {
+                    number_empty_neighbor_var_b++;
+                }
+            }
+
+            if (number_empty_neighbor_var_a > number_empty_neighbor_var_b)
+            {
+                x = var_a.position.Item1;
+                y = var_a.position.Item2;
+            }
+            else
+            {
+                x = var_b.position.Item1;
+                y = var_b.position.Item2;
+            }
+
+            return Tuple.Create(x,y);
+        }
+
+
 
 /*        // Mettre à jour le domaine d'une variable
         public List<int> Find_Domain(int value_x, int value_y, Assignement assignement)
@@ -139,7 +189,7 @@ namespace sudoku
             if (assignement.Get_complete()) { return true;  }
 
             // Sélection d'une variable vide
-            Tuple<int, int> var_position = MRV(a_csp.variables);
+            Tuple<int, int> var_position = MRV(a_csp);
 
             /*Tuple<int, int> var_position = Select_unassigned_variable();*/
 
