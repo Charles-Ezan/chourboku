@@ -61,7 +61,7 @@ namespace sudoku
                 { 0, 0, 9, 0, 0, 0, 1, 0, 0 }
             };
 
-            agent_sudoku.Initialize_assignement(second_sudoku);
+            agent_sudoku.Initialize_assignement(first_sudoku);
         }
 
         public void Create_grid()
