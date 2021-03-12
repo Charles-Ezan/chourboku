@@ -38,7 +38,6 @@ namespace sudoku
         {
             sudoku[a_row, a_column] = a_value;
             Is_complete();
-            //Console.WriteLine("Variable Set");
         }
 
         public void Reset_variable_in_sudoku(int a_row, int a_column)
