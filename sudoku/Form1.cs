@@ -61,7 +61,7 @@ namespace sudoku
                 { 0, 0, 9, 0, 0, 0, 1, 0, 0 }
             };
 
-            agent_sudoku.Initialize_assignement(first_sudoku);
+            agent_sudoku.Initialize_assignement(second_sudoku);
         }
 
         public void Create_grid()
@@ -172,8 +172,41 @@ namespace sudoku
         {
             bool solved_sudoku = agent_sudoku.BacktrackingSearch();
 
-            Console.WriteLine("Sudoku résolu ? " + solved_sudoku);
+            Console.WriteLine("Sudoku résolu ? " + solved_sudoku + " mesure de performance : " + agent_sudoku.performance_measure);
             Create_grid();
+
+
+
+            /*            int[,] first_sudoku = new int[,] { {0,9,0,8,6,5,2,0,0},
+                                                                                                      {0,0,5,0,1,2,0,6,8},
+                                                                                                      {0,0,0,0,0,0,0,4,0},
+                                                                                                      {0,0,0,0,0,8,0,5,6},
+                                                                                                      {0,0,8,0,0,0,4,0,0},
+                                                                                                      {4,5,0,9,0,0,0,0,0},
+                                                                                                      {0,8,0,0,0,0,0,0,0},
+                                                                                                      {2,4,0,1,7,0,5,0,0},
+                                                                                                      {0,0,7,2,8,3,0,9,0}};
+                        CSP csp = new CSP(first_sudoku);
+
+                        csp.Display_csp_element();*/
+
+
+            /*csp.Get_a_list_of_all_binary_constraints();*/
+            /*csp.Binary_initial_constraint_maker(Tuple.Create(1, 1), first_sudoku);*/
+            /*csp.Test_mini_grid_constraints(1, 0, 0, first_sudoku);*/
+
+
+            /*         Agent an_agent = new Agent();
+                     an_agent.Initialize_assignement(first_sudoku);*/
+
+            /*            CSP csp = new CSP(first_sudoku);
+                        Console.WriteLine("csp : " + csp.variables[8].domain.Count);
+                        CSP another_csp = new CSP();
+                        another_csp = csp;
+                        Console.WriteLine("another_csp : " + another_csp.variables[8].domain.Count);*/
+
+            /*            an_agent.Ac_3();*/
+
         }
     }
 }
