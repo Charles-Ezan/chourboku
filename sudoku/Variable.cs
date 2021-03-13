@@ -19,6 +19,7 @@ namespace sudoku
 
         // Domaine de la variable
         public List<int> domain = new List<int>();
+        /*public List<int> domain = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };*/
 
         // Liste des voisins de la variables
         public List<Tuple<int, int>> neighbours = new List<Tuple<int, int>>();
