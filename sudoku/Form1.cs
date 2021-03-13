@@ -17,8 +17,6 @@ namespace sudoku
 {
     public partial class Form1 : Form
     {
-        /*        Cell[,] Cells = new Cell[8, 8];*/
-
         private Agent agent_sudoku = new Agent();
         public Form1()
         {
@@ -134,39 +132,39 @@ namespace sudoku
             Create_grid();
             Console.WriteLine("Grille créée !");
         }
-
+        /*
         // Lire un sudoku dans un fichier json
         private void button2_Click(object sender, EventArgs e)
         {
             string json_path = $"C:\\Users\\riwan\\source\\repos\\chourboku\\sudoku\\sudokus.json";
-            /*var reader = new StreamReader(json_path);*/
-            /*         StreamReader file = new StreamReader(json_path);*/
-            /*string jsonString = */
+            *//*var reader = new StreamReader(json_path);*/
+        /*         StreamReader file = new StreamReader(json_path);*/
+        /*string jsonString = */
 
-            /*            using (StreamReader file = File.OpenText(@"C:\Users\riwan\source\repos\chourboku\sudoku"))
-                        {
-                            string jsonFromFile = StreamReader.ReadToEnd();
-                        }
-                        using (JsonTextReader reader = new JsonTextReader(file))
-                        {
-                            JObject o2 = (JObject)JToken.ReadFrom(reader);
-                        }*/
-            string jsonFromFile;
-            using (var reader = new StreamReader(json_path))
-            {
-                jsonFromFile = reader.ReadToEnd(); 
-            }
-            /*Console.WriteLine(jsonFromFile);*/
-            var j_object = (JObject)JsonConvert.DeserializeObject(jsonFromFile);
-            Console.WriteLine(j_object);
-
-            var a_sudoku = j_object["RawSudoku"].First;
-            List<string> string_sudoku = new List<string>();
-
-/*            Console.WriteLine(a_sudoku.GetType());
-            Console.WriteLine(a_sudoku);*/
-
+        /*            using (StreamReader file = File.OpenText(@"C:\Users\riwan\source\repos\chourboku\sudoku"))
+                    {
+                        string jsonFromFile = StreamReader.ReadToEnd();
+                    }
+                    using (JsonTextReader reader = new JsonTextReader(file))
+                    {
+                        JObject o2 = (JObject)JToken.ReadFrom(reader);
+                    }*//*
+        string jsonFromFile;
+        using (var reader = new StreamReader(json_path))
+        {
+            jsonFromFile = reader.ReadToEnd(); 
         }
+        *//*Console.WriteLine(jsonFromFile);*//*
+        var j_object = (JObject)JsonConvert.DeserializeObject(jsonFromFile);
+        Console.WriteLine(j_object);
+
+        var a_sudoku = j_object["RawSudoku"].First;
+        List<string> string_sudoku = new List<string>();
+
+*//*            Console.WriteLine(a_sudoku.GetType());
+            Console.WriteLine(a_sudoku);*//*
+
+        }*/
 
         private void launcher_resolution_Click(object sender, EventArgs e)
         {

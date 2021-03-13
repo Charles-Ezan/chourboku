@@ -12,8 +12,10 @@ namespace sudoku
         // Assignement
         private Assignement assignement = new Assignement();
 
+        // Mesure de performance
         public int performance_measure = 0;
 
+        // Création du csp
         private CSP csp;
 
 
@@ -31,6 +33,7 @@ namespace sudoku
             return assignement;
         }
 
+        // Algorithme d'exploration Backtracking
         public bool BacktrackingSearch()
             {
                 return RecursiveBacktracking(csp);
@@ -52,7 +55,7 @@ namespace sudoku
             }
             return Tuple.Create(100,100);
         }
-        // MRV - Choix de la variable avec le plus petit nombre de valeurs légales
+        // MRV - Choix de la variable avec le plus petit nombre de valeurs légales dans le domaine
         public Tuple<int, int> MRV(CSP csp)
         {
             int x_pos = 0;
@@ -188,7 +191,7 @@ namespace sudoku
             // Si le sudoku est complet alors on termine l'algorithme
             if (assignement.Get_complete()) { return true;  }
 
-            // Sélection d'une variable vide
+            // Sélection d'une variable vide (Optimisattion MRV)
             Tuple<int, int> var_position = MRV(a_csp);
 
             /*Tuple<int, int> var_position = Select_unassigned_variable();*/
@@ -200,7 +203,6 @@ namespace sudoku
                 if (a_csp.Is_assignement_consistent(value, var_position, assignement.sudoku))
                 {
                     assignement.Set_variable_in_sudoku(value, var_position.Item1, var_position.Item2);
-                    // Fonction Find domain
 
                     // Optimisation Ac-3
                     CSP new_csp = new CSP(assignement.sudoku);
@@ -220,6 +222,7 @@ namespace sudoku
         {
             CSP the_csp = a_csp;
             
+            // Queue contenant tous les arcs des variables
             Queue<Tuple<Tuple<int, int>, Tuple<int, int>>> queue = new Queue<Tuple<Tuple<int, int>, Tuple<int, int>>>();
 
             // Ajout de tous les arcs du csp à la queue
@@ -233,7 +236,7 @@ namespace sudoku
                 Tuple<Tuple<int, int>, Tuple<int, int>> arc_tested = queue.Dequeue();
                 if (Remove_inconsistent_values(arc_tested,the_csp))
                 {
-
+                    // On ajoute tous les arcs avec les voisins de la variable après avoir supprimé un élément du domaine
                     foreach (var neighbor in the_csp.Get_variable_from_position(arc_tested.Item1).neighbours)
                     {
                         queue.Enqueue(Tuple.Create(neighbor, arc_tested.Item1));
@@ -243,6 +246,7 @@ namespace sudoku
             return the_csp;
         }
 
+        // Elimine un élément du domaine d'une variable 1 si il n'y a aucun élément du domaine de la variable 2 répondant au test de consistance
         private bool Remove_inconsistent_values(Tuple<Tuple<int,int>,Tuple<int, int>> a_couple, CSP a_csp)
         {
             bool removed = false;

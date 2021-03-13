@@ -8,9 +8,8 @@ namespace sudoku
 {
     class CSP
     {
-        //Variables - Toutes les cases vides
-        List<Tuple<int, int>> variables_position = new List<Tuple<int, int>>();
 
+        // Toutes les variables du sudoku (non affectée et affectée)
         public List<Variable> variables = new List<Variable>();
 
 
@@ -58,7 +57,6 @@ namespace sudoku
                     else
                     {
                         a_variable.domain = Find_Domain(i,j,sudoku);//new List<int>() { 1,2,3,4,5,6,7,8,9 };
-                        /*Console.WriteLine("a_variable.domain.Count : " + a_variable.domain.Count);*/
 
                     }
 
@@ -71,8 +69,6 @@ namespace sudoku
                 Binary_initial_constraint_maker(variable.position, sudoku);
             }
 
-/*            Console.WriteLine("Nombre de variables : " + variables.Count);
-            Display_csp_element();*/
         }
 
 
@@ -120,6 +116,7 @@ namespace sudoku
             return a_variable;
         }
 
+        // Fonction d'affichage (debug)
         public void Display_csp_element()
         {
             Console.WriteLine("Fonction d'affichage !");
@@ -146,7 +143,7 @@ namespace sudoku
             Console.WriteLine();
         }
 
-
+        // Ajouter un nouveau domaine à une variable à partir de sa position
         public void Set_domain_of_variable(Tuple<int, int> a_variable_position, List<int> new_domain)
         {
             foreach (var variable in variables)
@@ -159,7 +156,7 @@ namespace sudoku
             }
         }
 
-        // Mettre à jour le domaine d'une variable
+        // Trouver le domaine d'une variable
         public List<int> Find_Domain(int value_x, int value_y, int[,] sudoku)
         {
             List<int> domaine = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
