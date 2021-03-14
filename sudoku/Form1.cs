@@ -18,6 +18,7 @@ namespace sudoku
     public partial class Form1 : Form
     {
         private Agent agent_sudoku = new Agent();
+
         public Form1()
         {
             InitializeComponent();
@@ -168,9 +169,26 @@ namespace sudoku
 
         private void launcher_resolution_Click(object sender, EventArgs e)
         {
+            // Optimisations utilisées
+            agent_sudoku.optimisation_used[0] = ac3_value.Checked;
+            agent_sudoku.optimisation_used[1] = mrv_value.Checked;
+            agent_sudoku.optimisation_used[2] = degree_heuristic_value.Checked;
+            agent_sudoku.optimisation_used[3] = least_constraining_value.Checked;
+
+            var watch = System.Diagnostics.Stopwatch.StartNew(); // timer
+
             bool solved_sudoku = agent_sudoku.BacktrackingSearch();
 
-            Console.WriteLine("Sudoku résolu ? " + solved_sudoku + " mesure de performance : " + agent_sudoku.performance_measure);
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+
+            sudoku_resolved_value.Text = solved_sudoku.ToString();
+
+
+            recursive_call_value.Text = agent_sudoku.performance_measure.ToString();
+
+            resolution_time_value.Text = elapsedMs.ToString() + " ms";
+
             Create_grid();
 
 

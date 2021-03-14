@@ -212,7 +212,7 @@ namespace sudoku
 
 
 
-
+        // Test de la valeur avant de l'assigner au sudoku
         public bool Is_assignement_consistent(int value_tested, Tuple<int, int> variable_position, int[,] sudoku)
         {
             // Test des contraintes
@@ -228,7 +228,7 @@ namespace sudoku
         }
 
 
-        // Fabrication contrainte binaire mini sudoku 
+        // Fabrication contraintes binaire mini sudoku 
         public List<Tuple<int, int>> Mini_grid_binary_constraints_maker(int value_x, int value_y, int[,] sudoku)
         {
             int interval_mini_grid_x = 0;

@@ -18,6 +18,9 @@ namespace sudoku
         // Création du csp
         private CSP csp;
 
+        // Optimisations utilisées
+        public List<bool> optimisation_used = new List<bool>() { false, false, false, false };
+
 
         // Initialisation du CSP et de l'assignement
         public void Initialize_assignement(int[,] sudoku)
@@ -75,8 +78,8 @@ namespace sudoku
                         x_pos = a_variable.position.Item1;
                         y_pos = a_variable.position.Item2;
                     }
-                    // Bris d'égalité entre variable
-                    else if (a_variable.domain.Count == min)
+                    // Optimisation Degree Heuristic - Bris d'égalité entre variable
+                    else if ((a_variable.domain.Count == min) && (optimisation_used[2]))
                     {
                         variable_kept = csp.Get_variable_from_position(Tuple.Create(x_pos, y_pos));
                         var position_after_DH = Degree_heuristic(a_variable, variable_kept, csp);
@@ -127,61 +130,6 @@ namespace sudoku
         }
 
 
-
-/*        // Mettre à jour le domaine d'une variable
-        public List<int> Find_Domain(int value_x, int value_y, Assignement assignement)
-        {
-            List<int> domaine = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-
-            for (int i = 0; i < assignement.sudoku.GetLength(1); i++)
-            {
-                if (assignement.sudoku[i, value_y] != 0)
-                {
-                    domaine.Remove(assignement.sudoku[i, value_y]);
-                }
-
-                if (assignement.sudoku[value_x, i] != 0)
-                {
-                    domaine.Remove(assignement.sudoku[value_x, i]);
-                }
-            }
-
-            int interval_mini_grid_x = 0;
-            int interval_mini_grid_y = 0;
-
-            for (int n = 1; n <= (assignement.sudoku.GetLength(0) / 3); n++)
-            {
-                if ((1 * n <= value_x + 1) && (value_x + 1 <= 3 * n))
-                {
-                    interval_mini_grid_x = n;
-                    break;
-                }
-            }
-
-            for (int k = 1; k <= (assignement.sudoku.GetLength(0) / 3); k++)
-            {
-                if ((1 * k <= value_y + 1) && (value_y + 1 <= 3 * k))
-                {
-                    interval_mini_grid_y = k;
-                    break;
-                }
-            }
-
-            for (int i = 3 * interval_mini_grid_x - 2; i < interval_mini_grid_x * 3 + 1; i++)
-            {
-                for (int j = 3 * interval_mini_grid_y - 2; j < interval_mini_grid_y * 3 + 1; j++)
-                {
-                    if ((assignement.sudoku[i - 1, j - 1]) != 0)
-                    {
-                        domaine.Remove(assignement.sudoku[i - 1, j - 1]);
-                    }
-                }
-            }
-
-            return domaine;
-        }*/
-
-
         // Fonction récursive du Backtracking
         private bool RecursiveBacktracking(CSP a_csp)
         {
@@ -191,10 +139,18 @@ namespace sudoku
             // Si le sudoku est complet alors on termine l'algorithme
             if (assignement.Get_complete()) { return true;  }
 
-            // Sélection d'une variable vide (Optimisattion MRV)
-            Tuple<int, int> var_position = MRV(a_csp);
+            Tuple<int, int> var_position;
 
-            /*Tuple<int, int> var_position = Select_unassigned_variable();*/
+            // Sélection d'une variable vide
+            if (optimisation_used[1]) {
+                // Optimisattion MRV
+                var_position = MRV(a_csp);
+            }
+            else {
+                var_position = Select_unassigned_variable();
+            }
+
+            /*Tuple<int, int> */
 
             foreach (int value in a_csp.Get_domain_of_variable(var_position))
             {
@@ -204,10 +160,11 @@ namespace sudoku
                 {
                     assignement.Set_variable_in_sudoku(value, var_position.Item1, var_position.Item2);
 
-                    // Optimisation Ac-3
                     CSP new_csp = new CSP(assignement.sudoku);
-                    new_csp = Ac_3(new_csp);
-
+                    if (optimisation_used[0]) {
+                        // Optimisation Ac-3
+                        new_csp = Ac_3(new_csp);
+                    }
 
                     bool result = RecursiveBacktracking(new_csp);
                     if (result) { return true; }
