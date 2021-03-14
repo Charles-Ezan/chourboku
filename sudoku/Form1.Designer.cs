@@ -31,18 +31,12 @@ namespace sudoku
         /// </summary>
         private void InitializeComponent()
         {
-            this.grid = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.launcher_resolution = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.grid = new System.Windows.Forms.Panel();
             this.SuspendLayout();
-            // 
-            // grid
-            // 
-            this.grid.Location = new System.Drawing.Point(29, 21);
-            this.grid.Name = "grid";
-            this.grid.Size = new System.Drawing.Size(515, 317);
-            this.grid.TabIndex = 0;
             // 
             // button1
             // 
@@ -73,6 +67,25 @@ namespace sudoku
             this.launcher_resolution.UseVisualStyleBackColor = true;
             this.launcher_resolution.Click += new System.EventHandler(this.launcher_resolution_Click);
             // 
+            // panel1
+            // 
+            this.panel1.AllowDrop = true;
+            this.panel1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panel1.Location = new System.Drawing.Point(12, 12);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(776, 426);
+            this.panel1.TabIndex = 4;
+            this.panel1.DragDrop += new System.Windows.Forms.DragEventHandler(this.panel1_DragDrop);
+            this.panel1.DragEnter += new System.Windows.Forms.DragEventHandler(this.panel1_DragEnter);
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // grid
+            // 
+            this.grid.Location = new System.Drawing.Point(29, 21);
+            this.grid.Name = "grid";
+            this.grid.Size = new System.Drawing.Size(453, 334);
+            this.grid.TabIndex = 0;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -82,16 +95,17 @@ namespace sudoku
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.grid);
+            this.Controls.Add(this.panel1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
 
         }
-
-        private Panel grid;
         private Button button1;
         private Button button2;
         private Button launcher_resolution;
+        private Panel panel1;
+        private Panel grid;
 
         #endregion
         /*        private System.Windows.Forms.DataGridView grid;
