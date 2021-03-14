@@ -135,7 +135,6 @@ namespace sudoku
         {
             // Incrémentation de la valeur de performance à chaque appelle
             performance_measure++;
-
             // Si le sudoku est complet alors on termine l'algorithme
             if (assignement.Get_complete()) { return true;  }
 

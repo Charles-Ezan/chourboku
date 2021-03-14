@@ -36,27 +36,30 @@ namespace sudoku
             this.button2 = new System.Windows.Forms.Button();
             this.launcher_resolution = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.resolution_time_value = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.sudoku_resolved_value = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.recursive_call_value = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.resolution_time_value = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.ac3_value = new System.Windows.Forms.CheckBox();
-            this.mrv_value = new System.Windows.Forms.CheckBox();
-            this.degree_heuristic_value = new System.Windows.Forms.CheckBox();
             this.least_constraining_value = new System.Windows.Forms.CheckBox();
+            this.degree_heuristic_value = new System.Windows.Forms.CheckBox();
+            this.mrv_value = new System.Windows.Forms.CheckBox();
+            this.ac3_value = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // grid
             // 
+            this.grid.AllowDrop = true;
             this.grid.Location = new System.Drawing.Point(29, 21);
             this.grid.Name = "grid";
             this.grid.Size = new System.Drawing.Size(515, 317);
             this.grid.TabIndex = 0;
+            this.grid.DragDrop += new System.Windows.Forms.DragEventHandler(this.grid_DragDrop);
+            this.grid.DragEnter += new System.Windows.Forms.DragEventHandler(this.grid_DragEnter);
             // 
             // button1
             // 
@@ -102,6 +105,24 @@ namespace sudoku
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Mesure de performance";
             // 
+            // resolution_time_value
+            // 
+            this.resolution_time_value.AutoSize = true;
+            this.resolution_time_value.Location = new System.Drawing.Point(130, 84);
+            this.resolution_time_value.Name = "resolution_time_value";
+            this.resolution_time_value.Size = new System.Drawing.Size(13, 13);
+            this.resolution_time_value.TabIndex = 5;
+            this.resolution_time_value.Text = "0";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 84);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(102, 13);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Temps de résolution";
+            // 
             // sudoku_resolved_value
             // 
             this.sudoku_resolved_value.AutoSize = true;
@@ -138,24 +159,6 @@ namespace sudoku
             this.label1.TabIndex = 0;
             this.label1.Text = "Nombre d\'appel récursif";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 84);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(102, 13);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Temps de résolution";
-            // 
-            // resolution_time_value
-            // 
-            this.resolution_time_value.AutoSize = true;
-            this.resolution_time_value.Location = new System.Drawing.Point(130, 84);
-            this.resolution_time_value.Name = "resolution_time_value";
-            this.resolution_time_value.Size = new System.Drawing.Size(13, 13);
-            this.resolution_time_value.TabIndex = 5;
-            this.resolution_time_value.Text = "0";
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.least_constraining_value);
@@ -169,25 +172,15 @@ namespace sudoku
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Optimisations";
             // 
-            // ac3_value
+            // least_constraining_value
             // 
-            this.ac3_value.AutoSize = true;
-            this.ac3_value.Location = new System.Drawing.Point(25, 42);
-            this.ac3_value.Name = "ac3_value";
-            this.ac3_value.Size = new System.Drawing.Size(48, 17);
-            this.ac3_value.TabIndex = 0;
-            this.ac3_value.Text = "Ac-3";
-            this.ac3_value.UseVisualStyleBackColor = true;
-            // 
-            // mrv_value
-            // 
-            this.mrv_value.AutoSize = true;
-            this.mrv_value.Location = new System.Drawing.Point(25, 65);
-            this.mrv_value.Name = "mrv_value";
-            this.mrv_value.Size = new System.Drawing.Size(50, 17);
-            this.mrv_value.TabIndex = 1;
-            this.mrv_value.Text = "MRV";
-            this.mrv_value.UseVisualStyleBackColor = true;
+            this.least_constraining_value.AutoSize = true;
+            this.least_constraining_value.Location = new System.Drawing.Point(25, 111);
+            this.least_constraining_value.Name = "least_constraining_value";
+            this.least_constraining_value.Size = new System.Drawing.Size(143, 17);
+            this.least_constraining_value.TabIndex = 3;
+            this.least_constraining_value.Text = "Least Constraining Value";
+            this.least_constraining_value.UseVisualStyleBackColor = true;
             // 
             // degree_heuristic_value
             // 
@@ -199,15 +192,25 @@ namespace sudoku
             this.degree_heuristic_value.Text = "Degree Heuristic";
             this.degree_heuristic_value.UseVisualStyleBackColor = true;
             // 
-            // least_constraining_value
+            // mrv_value
             // 
-            this.least_constraining_value.AutoSize = true;
-            this.least_constraining_value.Location = new System.Drawing.Point(25, 111);
-            this.least_constraining_value.Name = "least_constraining_value";
-            this.least_constraining_value.Size = new System.Drawing.Size(143, 17);
-            this.least_constraining_value.TabIndex = 3;
-            this.least_constraining_value.Text = "Least Constraining Value";
-            this.least_constraining_value.UseVisualStyleBackColor = true;
+            this.mrv_value.AutoSize = true;
+            this.mrv_value.Location = new System.Drawing.Point(25, 65);
+            this.mrv_value.Name = "mrv_value";
+            this.mrv_value.Size = new System.Drawing.Size(50, 17);
+            this.mrv_value.TabIndex = 1;
+            this.mrv_value.Text = "MRV";
+            this.mrv_value.UseVisualStyleBackColor = true;
+            // 
+            // ac3_value
+            // 
+            this.ac3_value.AutoSize = true;
+            this.ac3_value.Location = new System.Drawing.Point(25, 42);
+            this.ac3_value.Name = "ac3_value";
+            this.ac3_value.Size = new System.Drawing.Size(48, 17);
+            this.ac3_value.TabIndex = 0;
+            this.ac3_value.Text = "Ac-3";
+            this.ac3_value.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 

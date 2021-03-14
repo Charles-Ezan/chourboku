@@ -28,15 +28,15 @@ namespace sudoku
         public void Launch_first_sudoku()
         {
             // First Sudoku
-            int[,] first_sudoku = new int[,] { {0,9,0,8,6,5,2,0,0},
-                                          {0,0,5,0,1,2,0,6,8},
-                                          {0,0,0,0,0,0,0,4,0},
-                                          {0,0,0,0,0,8,0,5,6},
-                                          {0,0,8,0,0,0,4,0,0},
-                                          {4,5,0,9,0,0,0,0,0},
-                                          {0,8,0,0,0,0,0,0,0},
-                                          {2,4,0,1,7,0,5,0,0},
-                                          {0,0,7,2,8,3,0,9,0}};
+            int[,] first_sudoku = new int[,] { {0,4,9,0,0,0,0,0,0},
+                                          {0,0,6,0,2,0,0,0,0},
+                                          {0,0,0,0,1,0,0,0,7},
+                                          {8,0,0,0,3,0,2,0,0},
+                                          {0,0,1,0,0,6,0,0,0},
+                                          {0,0,0,0,0,0,0,0,5},
+                                          {2,0,0,0,0,0,0,0,0},
+                                          {0,0,0,5,0,4,0,0,0},
+                                          {0,0,0,0,0,9,0,4,0}};
 
             int[,] second_sudoku = new int[,]
             {
@@ -223,6 +223,86 @@ namespace sudoku
 
             /*            an_agent.Ac_3();*/
 
+        }
+
+        private void grid_DragEnter(object sender, DragEventArgs e)
+        {
+            string[] file = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            if (Is_SS_Filename(file) == true)
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private bool Is_SS_Filename(string[] file)
+        {
+            if ((file.Length == 1) && (Path.GetExtension(file[0]) == ".ss"))
+            {
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Wrong format or multiple files");
+                return false;
+            }
+        }
+
+        public int[,] SS_File_Converter(string Sudoku_SS)
+        {
+            List<char> sudoku_SS = Sudoku_SS.ToList();
+
+            Console.WriteLine(sudoku_SS);
+
+            for (var i = 0; i < sudoku_SS.Count; i++)
+            {
+                if (sudoku_SS[i] == '.')
+                {
+                    sudoku_SS[i] = '0';
+                }
+
+                if (sudoku_SS[i] == '-' || sudoku_SS[i] == '!')
+                {
+                    sudoku_SS[i] = ' ';
+                }
+            }
+
+            sudoku_SS.RemoveAll(item => item == ' ');
+            sudoku_SS.RemoveAll(item => item == '\n');
+
+            int rows = (int)Math.Sqrt(sudoku_SS.Count);
+
+            int[,] sudokuArray = new int[rows, rows];
+
+            int k = 0;
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < rows; j++)
+                {
+                    sudokuArray[i, j] = (int)sudoku_SS[k] - 48;
+                    k++;
+                }
+            }
+
+            return sudokuArray;
+        }
+
+        public void grid_DragDrop(object sender, DragEventArgs e)
+        {
+            var file = e.Data.GetData(DataFormats.FileDrop);
+            string[] filePath = file as string[];
+
+            string path = File.ReadAllText(filePath[0]); //drop sudoku
+
+            int[,] grid_sudoku = SS_File_Converter(path); //Conversion int[,]
+
+            agent_sudoku.Initialize_assignement(grid_sudoku);
+
+            Create_grid();
         }
     }
 }
