@@ -126,60 +126,85 @@ namespace sudoku
             return Tuple.Create(x,y);
         }
 
-
-
-/*        // Mettre à jour le domaine d'une variable
-        public List<int> Find_Domain(int value_x, int value_y, Assignement assignement)
+        // Least Constraining Value - on choisi la valeur la moins contraignante pour les autres variables
+        public int LeastContrainingValue(Variable currentVariable, CSP csp)
         {
-            List<int> domaine = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-
-            for (int i = 0; i < assignement.sudoku.GetLength(1); i++)
+            //on commence par récupérer le domaine de la variable à tester
+            var currentVariableDomain = currentVariable.domain;
+            List<int> candidatesList = new List<int>();
+            //pour chacune des variables du domaine, on va chercher combien de fois on les retrouves
+            foreach (var value in currentVariableDomain)
             {
-                if (assignement.sudoku[i, value_y] != 0)
+                foreach (var neighbor in currentVariable.neighbours)
                 {
-                    domaine.Remove(assignement.sudoku[i, value_y]);
-                }
-
-                if (assignement.sudoku[value_x, i] != 0)
-                {
-                    domaine.Remove(assignement.sudoku[value_x, i]);
-                }
-            }
-
-            int interval_mini_grid_x = 0;
-            int interval_mini_grid_y = 0;
-
-            for (int n = 1; n <= (assignement.sudoku.GetLength(0) / 3); n++)
-            {
-                if ((1 * n <= value_x + 1) && (value_x + 1 <= 3 * n))
-                {
-                    interval_mini_grid_x = n;
-                    break;
-                }
-            }
-
-            for (int k = 1; k <= (assignement.sudoku.GetLength(0) / 3); k++)
-            {
-                if ((1 * k <= value_y + 1) && (value_y + 1 <= 3 * k))
-                {
-                    interval_mini_grid_y = k;
-                    break;
-                }
-            }
-
-            for (int i = 3 * interval_mini_grid_x - 2; i < interval_mini_grid_x * 3 + 1; i++)
-            {
-                for (int j = 3 * interval_mini_grid_y - 2; j < interval_mini_grid_y * 3 + 1; j++)
-                {
-                    if ((assignement.sudoku[i - 1, j - 1]) != 0)
+                    //if neighbour.domain contain value : add value to candidatesList
+                    var neighborDomain = csp.Get_domain_of_variable(neighbor);
+                    if (neighborDomain.Contains(value))
                     {
-                        domaine.Remove(assignement.sudoku[i - 1, j - 1]);
+                        candidatesList.Add(value);
                     }
                 }
             }
+            //on converti la liste des candidats en array pour pouvoir trier les valeurs par fréquence
+            var candidatesListToArray = candidatesList.ToArray();
+            var groupedList = candidatesListToArray.GroupBy(i => i).OrderBy(g => g.Count()).Select(g => g.Key).ToList();
+            var leastCommonValeu = groupedList.First();
+            return leastCommonValeu;
+        }
 
-            return domaine;
-        }*/
+
+        /*        // Mettre à jour le domaine d'une variable
+                public List<int> Find_Domain(int value_x, int value_y, Assignement assignement)
+                {
+                    List<int> domaine = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+                    for (int i = 0; i < assignement.sudoku.GetLength(1); i++)
+                    {
+                        if (assignement.sudoku[i, value_y] != 0)
+                        {
+                            domaine.Remove(assignement.sudoku[i, value_y]);
+                        }
+
+                        if (assignement.sudoku[value_x, i] != 0)
+                        {
+                            domaine.Remove(assignement.sudoku[value_x, i]);
+                        }
+                    }
+
+                    int interval_mini_grid_x = 0;
+                    int interval_mini_grid_y = 0;
+
+                    for (int n = 1; n <= (assignement.sudoku.GetLength(0) / 3); n++)
+                    {
+                        if ((1 * n <= value_x + 1) && (value_x + 1 <= 3 * n))
+                        {
+                            interval_mini_grid_x = n;
+                            break;
+                        }
+                    }
+
+                    for (int k = 1; k <= (assignement.sudoku.GetLength(0) / 3); k++)
+                    {
+                        if ((1 * k <= value_y + 1) && (value_y + 1 <= 3 * k))
+                        {
+                            interval_mini_grid_y = k;
+                            break;
+                        }
+                    }
+
+                    for (int i = 3 * interval_mini_grid_x - 2; i < interval_mini_grid_x * 3 + 1; i++)
+                    {
+                        for (int j = 3 * interval_mini_grid_y - 2; j < interval_mini_grid_y * 3 + 1; j++)
+                        {
+                            if ((assignement.sudoku[i - 1, j - 1]) != 0)
+                            {
+                                domaine.Remove(assignement.sudoku[i - 1, j - 1]);
+                            }
+                        }
+                    }
+
+                    return domaine;
+                }*/
 
 
         // Fonction récursive du Backtracking
