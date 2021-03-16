@@ -9,39 +9,19 @@ namespace sudoku
     class CSP
     {
 
-        // Toutes les variables du sudoku (non affectée et affectée)
+        // Toutes les variables du sudoku (non affectée et affectée) - Avec la position et la valeur de la variable
         public List<Variable> variables = new List<Variable>();
 
+        // Listes de domaines associées aux variables
+        public List<List<int>> domains = new List<List<int>>();
 
-        /*        // Domaine
-                private List<int> domaine = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        // Listes de contraintes binaires associées aux variables
+        public List<List<Tuple<Tuple<int, int>, Tuple<int, int>>>> binary_contraints = new List<List<Tuple<Tuple<int, int>, Tuple<int, int>>>>();
 
-                //Contraintes
-                List<int> row_constraints = new List<int>();
-                List<int> column_constraints = new List<int>();
-                List<int> mini_grid_constraints = new List<int>();
-        */
-        // Initialisation des variables du CSP
-        /*        public CSP(int[,] sudoku)
-                {
-                    for (int i = 0; i < sudoku.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < sudoku.GetLength(1); j++)
-                        {
-                            if (sudoku[i, j] == 0)
-                            {
-                                variables.Add(new Variable(Tuple.Create(i, j)));
-                            }
-                        }
-                    }
-                    foreach (var variable in variables)
-                    {
-                        Binary_initial_constraint_maker(variable.position, sudoku);
-                    }
+        // Liste des voisins associées aux variables
+        public List<List<Tuple<int, int>>> neighbours = new List<List<Tuple<int, int>>>();
 
-                    Console.WriteLine("Nombre de variables : " + variables.Count);
-                }*/
-
+        // Constructeur
         public CSP(int[,] sudoku)
         {
             for (int i = 0; i < sudoku.GetLength(0); i++)
@@ -50,51 +30,59 @@ namespace sudoku
                 {
                     Variable a_variable = new Variable(Tuple.Create(i, j));
 
-                    if(sudoku[i,j] != 0) { 
-                        a_variable.domain = new List<int>() { sudoku[i, j] };
+                    if (sudoku[i, j] != 0)
+                    {
+                        domains.Add(new List<int>() { sudoku[i, j] });
                         a_variable.value = sudoku[i, j];
                     }
                     else
                     {
-                        a_variable.domain = Find_Domain(i,j,sudoku);//new List<int>() { 1,2,3,4,5,6,7,8,9 };
+                        domains.Add(Find_Domain(i, j, sudoku));
 
                     }
 
                     variables.Add(a_variable);
-
                 }
-            }
-            foreach (var variable in variables)
-            {
-                Binary_initial_constraint_maker(variable.position, sudoku);
             }
 
         }
 
-
-
-        public CSP() { }
-
-        public CSP(CSP csp)
+        public CSP(int[,] sudoku, CSP csp)
         {
-            this.variables = csp.variables;
-/*            foreach (Variable a_var in csp.variables)
+            for (int i = 0; i < sudoku.GetLength(0); i++)
             {
-                variables.Add(a_var);
+                for (int j = 0; j < sudoku.GetLength(1); j++)
+                {
+                    Variable a_variable = new Variable(Tuple.Create(i, j));
 
-            }*/
-/*            Display_csp_element();*/
+                    if (sudoku[i, j] != 0)
+                    {
+                        domains.Add(new List<int>() { sudoku[i, j] });
+                        a_variable.value = sudoku[i, j];
+                    }
+                    else
+                    {
+                        domains.Add(Find_Domain(i, j, sudoku));
+
+                    }
+
+                    variables.Add(a_variable);
+                }
+            }
+            binary_contraints = csp.binary_contraints;
+            neighbours = csp.neighbours;
+
         }
 
         // Récupérer le domaine d'une variable
         public List<int> Get_domain_of_variable(Tuple<int, int> a_variable_position)
         {
             List<int> domain = new List<int>();
-            foreach (var variable in variables)
+            for(int i=0; i< variables.Count; i++)
             {
-                if (variable.position.Equals(a_variable_position))
+                if (variables[i].position.Equals(a_variable_position))
                 {
-                    domain = variable.Get_domain();
+                    domain = domains[i];
                     break;
                 }
             }
@@ -116,41 +104,14 @@ namespace sudoku
             return a_variable;
         }
 
-        // Fonction d'affichage (debug)
-        public void Display_csp_element()
-        {
-            Console.WriteLine("Fonction d'affichage !");
-            Console.WriteLine("Nombre dans les domaines des variables !");
-            Console.WriteLine("Nombre de variables : " + variables.Count);
-            foreach (var variable in variables)
-            {
-                Console.Write(variable.domain.Count + " ");
-            }
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("Nombre de contraintes des variables !");
-            foreach (var variable in variables)
-            {
-                Console.Write(variable.binary_contraints.Count + " ");
-            }
-
-            Console.WriteLine();
-            Console.WriteLine("Nombre de voisins des variables !");
-            foreach (var variable in variables)
-            {
-                Console.Write(variable.neighbours.Count + " ");
-            }
-            Console.WriteLine();
-        }
-
         // Ajouter un nouveau domaine à une variable à partir de sa position
         public void Set_domain_of_variable(Tuple<int, int> a_variable_position, List<int> new_domain)
         {
-            foreach (var variable in variables)
+            for (int i = 0; i < variables.Count; i++)
             {
-                if (variable.position.Equals(a_variable_position))
+                if (variables[i].position.Equals(a_variable_position))
                 {
-                    variable.domain = new_domain;
+                    domains[i] = new_domain;
                     break;
                 }
             }
@@ -215,8 +176,10 @@ namespace sudoku
         // Test de la valeur avant de l'assigner au sudoku
         public bool Is_assignement_consistent(int value_tested, Tuple<int, int> variable_position, int[,] sudoku)
         {
-            // Test des contraintes
-            List<Tuple<int, int>> contraints = Get_variable_from_position(variable_position).neighbours;
+            // On récupère la valeur des voisins pour vérifier que la valeur que l'on souhaite assigner n'est pas déjà prise
+            int index_var = Get_index_of_variable_from_position(variable_position);
+
+            List<Tuple<int, int>> contraints = neighbours[index_var];
             foreach (var contraint in contraints)
             {
                 if (value_tested == sudoku[contraint.Item1, contraint.Item2])
@@ -226,7 +189,6 @@ namespace sudoku
             }
             return true;
         }
-
 
         // Fabrication contraintes binaire mini sudoku 
         public List<Tuple<int, int>> Mini_grid_binary_constraints_maker(int value_x, int value_y, int[,] sudoku)
@@ -291,7 +253,23 @@ namespace sudoku
             return row_binary_constraints;
         }
 
-        // Fabrication des contraintes binaires
+        // Récupère l'index de la variable recherchée
+        public int Get_index_of_variable_from_position(Tuple<int,int> var_position)
+        {
+            int index = 0;
+            for (int i=0; i<variables.Count; i++)
+            {
+                if (variables[i].position.Equals(var_position))
+                {
+                    index = i;
+                    break;
+                }
+            }
+            
+            return index;
+        }
+
+        // Création des contraintes binaires
         public void Binary_initial_constraint_maker(Tuple<int, int> var_position, int[,] sudoku)
         {
             List<Tuple<Tuple<int, int>, Tuple<int, int>>> list_binary_constraint = new List<Tuple<Tuple<int, int>, Tuple<int, int>>>();
@@ -299,36 +277,39 @@ namespace sudoku
             List<Tuple<int, int>> all_variable_constraints = new List<Tuple<int, int>>();
             all_variable_constraints = Row_binary_constraints_maker(var_position.Item1, sudoku);
 
-            // Ajout des contraintes de colonne en élmininant les variables dupliqué
+            // Ajout des contraintes de colonne en élmininant les variables dupliquées
             all_variable_constraints = Lists_merger(all_variable_constraints, Column_binary_constraints_maker(var_position.Item2, sudoku));
 
-            // Ajout des contraintes de colonne en élmininant les variables dupliqué
+            // Ajout des contraintes de colonne en élmininant les variables dupliquées
             all_variable_constraints = Lists_merger(all_variable_constraints, Mini_grid_binary_constraints_maker(var_position.Item1, var_position.Item2, sudoku));
 
+            int index_var = Get_index_of_variable_from_position(var_position);
 
-
+            neighbours.Add(new List<Tuple<int, int>>());
             foreach (Tuple<int, int> variable_constraint in all_variable_constraints)
             {
-                if (!variable_constraint.Equals(var_position)) { 
+                if (!variable_constraint.Equals(var_position))
+                {
                     list_binary_constraint.Add(Tuple.Create(var_position, variable_constraint));
-                    Get_variable_from_position(var_position).neighbours.Add(variable_constraint);
+                    neighbours[index_var].Add(variable_constraint);
                 }
             }
-            Get_variable_from_position(var_position).binary_contraints = list_binary_constraint;
+            binary_contraints.Add(list_binary_constraint);
         }
 
+        // Récupère une liste de toutes les contraintes binaires du sudoku
         public List<Tuple<Tuple<int, int>, Tuple<int, int>>> Get_a_list_of_all_binary_constraints()
         {
             List<Tuple<Tuple<int, int>, Tuple<int, int>>> list_binary_constraint = new List<Tuple<Tuple<int, int>, Tuple<int, int>>>();
 
-            foreach(var variable in variables)
+            foreach(var binary_contraint in binary_contraints)
             {
-                list_binary_constraint.AddRange(variable.binary_contraints);
+                list_binary_constraint.AddRange(binary_contraint);
             }
             return list_binary_constraint;
         }
 
-
+        // Fusionne deux listes en retirant les éléments redondants
         public List<Tuple<int, int>> Lists_merger(List<Tuple<int,int>> list_1, List<Tuple<int, int>> list_2)
         {
             List<Tuple<int, int>> list_merged = new List<Tuple<int, int>>(list_1);

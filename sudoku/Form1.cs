@@ -27,17 +27,6 @@ namespace sudoku
 
         public void Launch_first_sudoku()
         {
-            // First Sudoku
-            int[,] first_sudoku = new int[,] { {0,4,9,0,0,0,0,0,0},
-                                          {0,0,6,0,2,0,0,0,0},
-                                          {0,0,0,0,1,0,0,0,7},
-                                          {8,0,0,0,3,0,2,0,0},
-                                          {0,0,1,0,0,6,0,0,0},
-                                          {0,0,0,0,0,0,0,0,5},
-                                          {2,0,0,0,0,0,0,0,0},
-                                          {0,0,0,5,0,4,0,0,0},
-                                          {0,0,0,0,0,9,0,4,0}};
-
             int[,] second_sudoku = new int[,]
             {
 
@@ -60,7 +49,30 @@ namespace sudoku
                 { 0, 0, 9, 0, 0, 0, 1, 0, 0 }
             };
 
-            agent_sudoku.Initialize_assignement(first_sudoku);
+
+            int[,] third_sudoku = new int[,]
+{
+
+                { 0,0,0,0,0,4,6,7,8},
+
+                { 0,0,0,9,0,0,0,0,4},
+
+                { 0,0,7,0,0,6,1,9,0},
+
+                { 0,9,8,7,6,0,0,0,2},
+
+                { 0,0,0,0,0,0,0,0,0},
+
+                { 6,0,0,0,3,2,9,1,0},
+
+                { 0,8,2,6,0,0,7,0,0 },
+
+                { 7,0,0,0,0,3,0,0,0 },
+
+                { 9,5,6,4,0,0,0,0,0}
+};
+
+            agent_sudoku.Initialize_assignement(third_sudoku);
         }
 
         public void Create_grid()
@@ -133,39 +145,6 @@ namespace sudoku
             Create_grid();
             Console.WriteLine("Grille créée !");
         }
-        /*
-        // Lire un sudoku dans un fichier json
-        private void button2_Click(object sender, EventArgs e)
-        {
-            string json_path = $"C:\\Users\\riwan\\source\\repos\\chourboku\\sudoku\\sudokus.json";
-            *//*var reader = new StreamReader(json_path);*/
-        /*         StreamReader file = new StreamReader(json_path);*/
-        /*string jsonString = */
-
-        /*            using (StreamReader file = File.OpenText(@"C:\Users\riwan\source\repos\chourboku\sudoku"))
-                    {
-                        string jsonFromFile = StreamReader.ReadToEnd();
-                    }
-                    using (JsonTextReader reader = new JsonTextReader(file))
-                    {
-                        JObject o2 = (JObject)JToken.ReadFrom(reader);
-                    }*//*
-        string jsonFromFile;
-        using (var reader = new StreamReader(json_path))
-        {
-            jsonFromFile = reader.ReadToEnd(); 
-        }
-        *//*Console.WriteLine(jsonFromFile);*//*
-        var j_object = (JObject)JsonConvert.DeserializeObject(jsonFromFile);
-        Console.WriteLine(j_object);
-
-        var a_sudoku = j_object["RawSudoku"].First;
-        List<string> string_sudoku = new List<string>();
-
-*//*            Console.WriteLine(a_sudoku.GetType());
-            Console.WriteLine(a_sudoku);*//*
-
-        }*/
 
         private void launcher_resolution_Click(object sender, EventArgs e)
         {
@@ -190,41 +169,9 @@ namespace sudoku
             resolution_time_value.Text = elapsedMs.ToString() + " ms";
 
             Create_grid();
-
-
-
-            /*            int[,] first_sudoku = new int[,] { {0,9,0,8,6,5,2,0,0},
-                                                                                                      {0,0,5,0,1,2,0,6,8},
-                                                                                                      {0,0,0,0,0,0,0,4,0},
-                                                                                                      {0,0,0,0,0,8,0,5,6},
-                                                                                                      {0,0,8,0,0,0,4,0,0},
-                                                                                                      {4,5,0,9,0,0,0,0,0},
-                                                                                                      {0,8,0,0,0,0,0,0,0},
-                                                                                                      {2,4,0,1,7,0,5,0,0},
-                                                                                                      {0,0,7,2,8,3,0,9,0}};
-                        CSP csp = new CSP(first_sudoku);
-
-                        csp.Display_csp_element();*/
-
-
-            /*csp.Get_a_list_of_all_binary_constraints();*/
-            /*csp.Binary_initial_constraint_maker(Tuple.Create(1, 1), first_sudoku);*/
-            /*csp.Test_mini_grid_constraints(1, 0, 0, first_sudoku);*/
-
-
-            /*         Agent an_agent = new Agent();
-                     an_agent.Initialize_assignement(first_sudoku);*/
-
-            /*            CSP csp = new CSP(first_sudoku);
-                        Console.WriteLine("csp : " + csp.variables[8].domain.Count);
-                        CSP another_csp = new CSP();
-                        another_csp = csp;
-                        Console.WriteLine("another_csp : " + another_csp.variables[8].domain.Count);*/
-
-            /*            an_agent.Ac_3();*/
-
         }
 
+        // Fonction pour Drag and Drop un sudoku au format ".ss"
         private void grid_DragEnter(object sender, DragEventArgs e)
         {
             string[] file = (string[])e.Data.GetData(DataFormats.FileDrop, false);

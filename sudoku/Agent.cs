@@ -27,7 +27,12 @@ namespace sudoku
         {
             assignement.Initialize_sudoku(sudoku);
             csp = new CSP(sudoku);
+            foreach (var variable in csp.variables)
+            {
+                csp.Binary_initial_constraint_maker(variable.position, sudoku);
+            }
             performance_measure = 0;
+
         }
 
 
@@ -58,6 +63,7 @@ namespace sudoku
             }
             return Tuple.Create(100,100);
         }
+
         // MRV - Choix de la variable avec le plus petit nombre de valeurs légales dans le domaine
         public Tuple<int, int> MRV(CSP csp)
         {
@@ -66,23 +72,21 @@ namespace sudoku
 
             int min = assignement.sudoku.GetLength(0);
 
-            Variable variable_kept = new Variable();
-
-            foreach (Variable a_variable in csp.variables)
+            for (int i=0; i<csp.variables.Count; i++)
             {
-                if(a_variable.value == 0)
+                if (csp.variables[i].value == 0)
                 {
-                    if(a_variable.domain.Count < min)
+                    if (csp.domains[i].Count < min)
                     {
-                        min = a_variable.domain.Count;
-                        x_pos = a_variable.position.Item1;
-                        y_pos = a_variable.position.Item2;
+                        min = csp.domains[i].Count;
+                        x_pos = csp.variables[i].position.Item1;
+                        y_pos = csp.variables[i].position.Item2;
                     }
                     // Optimisation Degree Heuristic - Bris d'égalité entre variable
-                    else if ((a_variable.domain.Count == min) && (optimisation_used[2]))
+                    else if ((csp.domains[i].Count == min) && (optimisation_used[2]))
                     {
-                        variable_kept = csp.Get_variable_from_position(Tuple.Create(x_pos, y_pos));
-                        var position_after_DH = Degree_heuristic(a_variable, variable_kept, csp);
+                        Variable variable_kept = csp.Get_variable_from_position(Tuple.Create(x_pos, y_pos));
+                        var position_after_DH = Degree_heuristic(csp.variables[i], variable_kept, csp);
                         x_pos = position_after_DH.Item1;
                         y_pos = position_after_DH.Item2;
                     }
@@ -92,29 +96,33 @@ namespace sudoku
         }
 
         // Degree Heuristic - On choisi la variable avec le plus de voisin avec variable non assigné
-        public Tuple<int,int> Degree_heuristic(Variable var_a, Variable var_b, CSP csp)
+        public Tuple<int, int> Degree_heuristic(Variable var_a, Variable var_b, CSP csp)
         {
             int number_empty_neighbor_var_a = 0;
             int number_empty_neighbor_var_b = 0;
             int x = 0;
             int y = 0;
 
-            foreach (Tuple<int,int> neighbour_position  in var_a.neighbours)
+            int index_var_a = csp.Get_index_of_variable_from_position(var_a.position);
+            int index_var_b = csp.Get_index_of_variable_from_position(var_b.position);
+
+            foreach (Tuple<int, int> neighbour_position in csp.neighbours[index_var_a])
             {
-                if(csp.Get_variable_from_position(neighbour_position).value == 0)
+                if (csp.variables[csp.Get_index_of_variable_from_position(neighbour_position)].value == 0)
                 {
                     number_empty_neighbor_var_a++;
                 }
             }
 
-            foreach (Tuple<int, int> neighbour_position in var_b.neighbours)
+            foreach (Tuple<int, int> neighbour_position in csp.neighbours[index_var_b])
             {
-                if (csp.Get_variable_from_position(neighbour_position).value == 0)
+                if (csp.variables[csp.Get_index_of_variable_from_position(neighbour_position)].value == 0)
                 {
                     number_empty_neighbor_var_b++;
                 }
             }
 
+            // Récupération des coordonnées du membres
             if (number_empty_neighbor_var_a > number_empty_neighbor_var_b)
             {
                 x = var_a.position.Item1;
@@ -126,9 +134,37 @@ namespace sudoku
                 y = var_b.position.Item2;
             }
 
-            return Tuple.Create(x,y);
+            return Tuple.Create(x, y);
         }
 
+        // Least Constraining Value - on choisi la valeur la moins contraignante pour les autres variables
+        public List<int> LeastContrainingValue(Tuple<int,int> var_position, CSP csp)
+        {
+            //on commence par récupérer le domaine de la variable à tester
+            List<int> currentVariableDomain = csp.Get_domain_of_variable(var_position);
+
+            // Index de la variable exploitée
+            int index_var = csp.Get_index_of_variable_from_position(var_position);
+
+            List<int> candidatesList = new List<int>();
+            //pour chacune des variables du domaine, on va chercher combien de fois on les retrouves
+            foreach (var value in currentVariableDomain)
+            {
+                foreach (var neighbor in csp.neighbours[index_var])
+                {
+                    //if neighbour.domain contain value : add value to candidatesList
+                    var neighborDomain = csp.Get_domain_of_variable(neighbor);
+                    if (neighborDomain.Contains(value))
+                    {
+                        candidatesList.Add(value);
+                    }
+                }
+            }
+            //on converti la liste des candidats en array pour pouvoir trier les valeurs par fréquence
+            var candidatesListToArray = candidatesList.ToArray();
+            var groupedList = candidatesListToArray.GroupBy(i => i).OrderBy(g => g.Count()).Select(g => g.Key).ToList();
+            return groupedList;
+        }
 
         // Fonction récursive du Backtracking
         private bool RecursiveBacktracking(CSP a_csp)
@@ -145,21 +181,26 @@ namespace sudoku
                 // Optimisattion MRV
                 var_position = MRV(a_csp);
             }
+
             else {
                 var_position = Select_unassigned_variable();
             }
+            List<int> domain_var = new List<int>(a_csp.Get_domain_of_variable(var_position));
+            if (optimisation_used[3]) {
+                domain_var = LeastContrainingValue(var_position, a_csp);
+            }
 
-            /*Tuple<int, int> */
-
-            foreach (int value in a_csp.Get_domain_of_variable(var_position))
+            // On itère dans le domaine de la variable transmis
+            foreach (int value in domain_var)
             {
-
                 // Test de la consistance avec les contraintes
                 if (a_csp.Is_assignement_consistent(value, var_position, assignement.sudoku))
                 {
+                    // Assignement d'une valeur au sudoku
                     assignement.Set_variable_in_sudoku(value, var_position.Item1, var_position.Item2);
 
-                    CSP new_csp = new CSP(assignement.sudoku);
+                    CSP new_csp = new CSP(assignement.sudoku, a_csp);
+
                     if (optimisation_used[0]) {
                         // Optimisation Ac-3
                         new_csp = Ac_3(new_csp);
@@ -174,10 +215,8 @@ namespace sudoku
         }
 
         // Algorithme de propagation de contrainte AC-3
-        public CSP Ac_3(CSP a_csp)
+        public CSP Ac_3(CSP the_csp)
         {
-            CSP the_csp = a_csp;
-            
             // Queue contenant tous les arcs des variables
             Queue<Tuple<Tuple<int, int>, Tuple<int, int>>> queue = new Queue<Tuple<Tuple<int, int>, Tuple<int, int>>>();
 
@@ -185,15 +224,14 @@ namespace sudoku
             foreach (var element in csp.Get_a_list_of_all_binary_constraints())
             {
                 queue.Enqueue(element);
-            }            
-
+            }
             while (queue.Count != 0)
             {
                 Tuple<Tuple<int, int>, Tuple<int, int>> arc_tested = queue.Dequeue();
                 if (Remove_inconsistent_values(arc_tested,the_csp))
                 {
                     // On ajoute tous les arcs avec les voisins de la variable après avoir supprimé un élément du domaine
-                    foreach (var neighbor in the_csp.Get_variable_from_position(arc_tested.Item1).neighbours)
+                    foreach (var neighbor in the_csp.neighbours[the_csp.Get_index_of_variable_from_position(arc_tested.Item1)])
                     {
                         queue.Enqueue(Tuple.Create(neighbor, arc_tested.Item1));
                     }
