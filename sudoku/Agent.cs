@@ -127,7 +127,7 @@ namespace sudoku
         }
 
         // Least Constraining Value - on choisi la valeur la moins contraignante pour les autres variables
-        public int LeastContrainingValue(Variable currentVariable, CSP csp)
+        public List<int> LeastContrainingValue(Variable currentVariable, CSP csp)
         {
             //on commence par récupérer le domaine de la variable à tester
             var currentVariableDomain = currentVariable.domain;
@@ -148,8 +148,8 @@ namespace sudoku
             //on converti la liste des candidats en array pour pouvoir trier les valeurs par fréquence
             var candidatesListToArray = candidatesList.ToArray();
             var groupedList = candidatesListToArray.GroupBy(i => i).OrderBy(g => g.Count()).Select(g => g.Key).ToList();
-            var leastCommonValeu = groupedList.First();
-            return leastCommonValeu;
+            //var leastCommonValue = groupedList.First();
+            return groupedList;
         }
 
 
@@ -218,10 +218,11 @@ namespace sudoku
 
             // Sélection d'une variable vide (Optimisattion MRV)
             Tuple<int, int> var_position = MRV(a_csp);
-
+            var varVariable = csp.Get_variable_from_position(var_position);
             /*Tuple<int, int> var_position = Select_unassigned_variable();*/
-
-            foreach (int value in a_csp.Get_domain_of_variable(var_position))
+            List<int> leastConstrainingValues = LeastContrainingValue(varVariable, a_csp);
+            //foreach (int value in a_csp.Get_domain_of_variable(var_position))
+            foreach (int value in leastConstrainingValues)
             {
 
                 // Test de la consistance avec les contraintes
