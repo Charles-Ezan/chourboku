@@ -160,10 +160,16 @@ namespace sudoku
                     }
                 }
             }
-            //on converti la liste des candidats en array pour pouvoir trier les valeurs par fréquence
+            candidatesList.AddRange(currentVariableDomain);
+            //on range la liste par ordre de valeur croissance pour prérassembler toutes les valeurs similaires
+            candidatesList.Sort();
+            //on passe par un tableau pour pouvoir grouper les valeurs par similarité, puis on réordonne par popularité
             var candidatesListToArray = candidatesList.ToArray();
-            var groupedList = candidatesListToArray.GroupBy(i => i).OrderBy(g => g.Count()).Select(g => g.Key).ToList();
-            return groupedList;
+            candidatesListToArray.GroupBy(i => i).OrderByDescending(j => j.Count()).Select(k => k.Key);
+            List<int> finalList = candidatesListToArray.ToList();
+            //la fonction distinct permet de supprimer les doublons, ça m'assure qu'il n'en reste vraiment aucun
+            //finalList.Distinct();
+            return finalList;
         }
 
         // Fonction récursive du Backtracking
